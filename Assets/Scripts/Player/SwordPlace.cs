@@ -5,6 +5,9 @@ using UnityEngine;
 public class SwordPlace : MonoBehaviour
 {
     [SerializeField] private List<Transform> places;
+
+
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -40,22 +43,22 @@ public class SwordPlace : MonoBehaviour
             SetSwordPositionAndRotation(places[3].position, 180);
         }
 
-
-
-        void SetSwordPositionAndRotation(Vector3 _offsetDirection,float _angle)
-        {
-            // Set position based on input direction
-            transform.position = _offsetDirection;
-
-            if(transform.eulerAngles.z!=_angle)
-            {
-                // Calculate rotation based on input direction
-                Quaternion targetRotation = Quaternion.AngleAxis(_angle, Vector3.forward);
-
-                // Smoothly interpolate to the target rotation
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 90 * Time.deltaTime);
-            }
-            
-        }
     }
+
+    void SetSwordPositionAndRotation(Vector3 _offsetDirection, float _angle)
+    {
+        // Set position based on input direction
+        transform.position = _offsetDirection;
+
+        if (transform.eulerAngles.z != _angle)
+        {
+            // Calculate rotation based on input direction
+            Quaternion targetRotation = Quaternion.AngleAxis(_angle, Vector3.forward);
+
+            // Smoothly interpolate to the target rotation
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 90 * Time.deltaTime);
+        }
+
+    }
+
 }
