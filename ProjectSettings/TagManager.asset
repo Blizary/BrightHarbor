@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Sword
   - PlayerBody
+  - MySprites
+  - MyLighting
   layers:
   - Default
   - TransparentFX
@@ -42,4 +44,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: MySprites
+    uniqueID: 2873860031
+    locked: 0
+  - name: MyLighting
+    uniqueID: 1156506687
     locked: 0

@@ -50,15 +50,19 @@ public class EnemyController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.CompareTag("Sword"))
+        if(!dead)
         {
-            OnEnemyHit();
-            
+            if (other.CompareTag("Sword"))
+            {
+                OnEnemyHit();
+
+            }
+            else if (other.CompareTag("PlayerBody"))
+            {
+                onPlayerHit.Raise(damageOnHit);
+            }
         }
-        else if(other.CompareTag("PlayerBody"))
-        {
-            onPlayerHit.Raise(damageOnHit);
-        }
+        
     }
 
 
