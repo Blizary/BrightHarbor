@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
 
@@ -9,17 +10,22 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private float movementSpeed;
     [SerializeField] private float attackRange;
+    [SerializeField] private float lungeForce;
+    [SerializeField] private float damageOnHit;
 
     [SerializeField] private int health;
     [SerializeField] private int currentHealth;
 
+    [SerializeField] private GameEvent_Float onPlayerHit;
+
     private bool canMove = true;
     private bool dead = false;
 
-
+    private Rigidbody2D rb;
     private void Awake()
     {
         currentHealth = health;
+        rb = GetComponent<Rigidbody2D>();
     }
     // Start is called before the first frame update
     void Start()
@@ -30,10 +36,14 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(canMove)
+        if(!dead)
         {
-            SimpleChasePlayer();
+            if (canMove)
+            {
+                SimpleChasePlayer();
+            }
         }
+        
         
     }
 
@@ -45,14 +55,25 @@ public class EnemyController : MonoBehaviour
             OnEnemyHit();
             
         }
+        else if(other.CompareTag("PlayerBody"))
+        {
+            onPlayerHit.Raise(damageOnHit);
+        }
     }
 
 
     void SimpleChasePlayer()
     {
+
         // Calculate the direction to the target
         Vector3 direction = player.transform.position - transform.position;
         direction.Normalize();
+
+        // Calculate the angle in degrees
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        // Set only the z rotation to face the player
+        transform.GetChild(0).transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
 
         // Move towards the target
         transform.Translate(direction * movementSpeed * Time.deltaTime);
@@ -64,34 +85,45 @@ public class EnemyController : MonoBehaviour
         if (distanceToTarget <= attackRange)
         {
             canMove = false;
-            LungdeAttack();
-            
+            StartCoroutine(IEWaitForLundgeAttack());
+            //LungdeAttack();
+
         }
     }
 
     void LungdeAttack()
     {
         m_Animator.SetTrigger("Attack");
-        // Calculate the direction to the target
-        Vector3 direction = player.transform.position - transform.position;
-        direction.Normalize();
-        // Move towards the target
-        transform.Translate(direction * movementSpeed*300 * Time.deltaTime);
+        // Calculate the direction towards the player
+        Vector2 direction = (player.transform.position - transform.position).normalized;
 
-        
-        StartCoroutine(WaitForAttackReset());
+        // Apply force to lunge at the player
+        rb.AddForce(direction * lungeForce, ForceMode2D.Impulse);
+
+        // Optionally, you can add other actions when lunging, such as playing an animation or sound
+        StartCoroutine(IEWaitForAttackReset());
+
     }
 
-    IEnumerator WaitForAttackReset()
+    IEnumerator IEWaitForLundgeAttack()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.2f);
+        LungdeAttack();
+    }
+    IEnumerator IEWaitForAttackReset()
+    {
+        yield return new WaitForSeconds(1.5f);
+        rb.AddForce(-rb.velocity, ForceMode2D.Impulse);
         canMove = true;
     }
 
     void OnEnemyHit()
     {
+        rb.AddForce(-rb.velocity, ForceMode2D.Impulse);
+        canMove = false;
         m_Animator.SetTrigger("Hit");
         UpdateHealth(-1);
+        StartCoroutine(IEWaitForAttackReset());
     }
 
     void UpdateHealth(int _diff)
@@ -109,4 +141,7 @@ public class EnemyController : MonoBehaviour
         }
           
     }
+
+
+
 }
