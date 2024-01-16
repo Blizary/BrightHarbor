@@ -5,7 +5,7 @@ using UnityEngine;
 public class SwordController : MonoBehaviour
 {
 
-    [SerializeField] private GameEventListener onAttackTrigger;
+    [SerializeField] private GameEventListener_Integer onAttackTrigger;
 
     [SerializeField] private Animator animator;
 
@@ -26,7 +26,7 @@ public class SwordController : MonoBehaviour
     }
 
 
-    void OnAttackTrigger()
+    void OnAttackTrigger(int _dir)
     {
         animator.SetTrigger("Attack");
     }
