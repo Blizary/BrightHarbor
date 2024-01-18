@@ -8,6 +8,7 @@ TagManager:
   - PlayerBody
   - MySprites
   - MyLighting
+  - Enemy
   layers:
   - Default
   - TransparentFX

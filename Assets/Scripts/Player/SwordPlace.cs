@@ -10,14 +10,17 @@ public class SwordPlace : MonoBehaviour
 
     [SerializeField] private GameEventListener_Integer onAttackTrigger;
     [SerializeField] private GameEventListener onAttackFinnished;
+    [SerializeField] private GameEventListener_Integer onSummonSword;
 
-    private FacingDirection lastFaceDir;
+    [SerializeField] private FacingDirection lastFaceDir;
     private bool isAttacking;
+    private bool canAttack = false;
     // Start is called before the first frame update
     void Start()
     {
         onAttackTrigger.Response.AddListener(OnAttackTrigger);
         onAttackFinnished.Response.AddListener(OnAttackFinnish);
+        onSummonSword.Response.AddListener(OnSummonSword);
     }
 
     // Update is called once per frame
@@ -72,33 +75,36 @@ public class SwordPlace : MonoBehaviour
             Quaternion targetRotation = Quaternion.AngleAxis(_angle, Vector3.forward);
 
             // Smoothly interpolate to the target rotation
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 90 * Time.deltaTime);
+            transform.rotation = Quaternion.Euler(0, 0, _angle);
+            //transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 90 * Time.deltaTime);
         }
         
     }
     void OnAttackTrigger(int _dir)
     {
-
-        switch (_dir)
+        if (canAttack)
         {
-            case 0://UP
-                lastFaceDir = FacingDirection.UP;
-                SetSwordPositionAndRotation(attackLocations[0].position, 0);
-                break;
-            case 1://DOWN
-                lastFaceDir = FacingDirection.DOWN;
-                SetSwordPositionAndRotation(attackLocations[1].position, 180);
-                break;
-            case 2://RIGHT
-                lastFaceDir = FacingDirection.RIGHT;
-                SetSwordPositionAndRotation(attackLocations[2].position, 270);
-                break;
-            case 3://LEFT
-                lastFaceDir = FacingDirection.LEFT;
-                SetSwordPositionAndRotation(attackLocations[3].position, 90);
-                break;
+            switch (_dir)
+            {
+                case 0://UP
+                    lastFaceDir = FacingDirection.UP;
+                    SetSwordPositionAndRotation(attackLocations[0].position, 0);
+                    break;
+                case 1://DOWN
+                    lastFaceDir = FacingDirection.DOWN;
+                    SetSwordPositionAndRotation(attackLocations[1].position, 180);
+                    break;
+                case 2://RIGHT
+                    lastFaceDir = FacingDirection.RIGHT;
+                    SetSwordPositionAndRotation(attackLocations[2].position, 270);
+                    break;
+                case 3://LEFT
+                    lastFaceDir = FacingDirection.LEFT;
+                    SetSwordPositionAndRotation(attackLocations[3].position, 90);
+                    break;
+            }
+            isAttacking = true;
         }
-        isAttacking = true;
     }
 
     public void OnAttackFinnish()
@@ -120,6 +126,13 @@ public class SwordPlace : MonoBehaviour
                 SetSwordPositionAndRotation(places[1].position, 0);
                 break;
         }
+        transform.rotation = Quaternion.identity;
     }
-        
+
+    void OnSummonSword(int _size)
+    {
+        canAttack = true;
+    }
+
+
 }

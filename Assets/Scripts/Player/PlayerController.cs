@@ -14,32 +14,51 @@ public enum FacingDirection
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private FacingDirection currentdirection;
-    [SerializeField] private float moveSpeed = 5f; // Adjust this to control the player's movement speed
+    [SerializeField] private float moveSpeed;
     [SerializeField] private float health;
     [SerializeField] private float currentHealth;
     [SerializeField] private float invunerabilityTime;
     [SerializeField] private float lightAmount;
     [SerializeField] private float currentLightAmount;
     [SerializeField] private float dashPower;
-   
+
+
+    [SerializeField] private float minValue = 0f;
+    [SerializeField] private float maxValue = 3f;
+    [SerializeField] private float rateOfChange = 0.5f;
+
+    [SerializeField] private List<LightToPlayerSpeedRelation> lightToPlayerSpeedRelations;
+
+    private float currentValue = 0f;
+    private float swordSummontimer = 0f;
+
+    private float stealLightTimer = 0f;
+
     private bool mousePressed = false;
 
     [SerializeField] private GameEventListener_Float onPlayerHit;
     [SerializeField] private GameEvent onPlayerDeath;
     [SerializeField] private GameEvent_Integer onAttackTrigger;
+    [SerializeField] private GameEvent_Integer onSummonSword;
+    [SerializeField] private GameEvent onStealLight;
+    [SerializeField] private GameEventListener_Float onEffectLight;
 
     private bool canBeHit = true;
     private bool isAlive = true;
     private bool isDashing = false;
 
+    Animator animator;
     Rigidbody2D rb;
 
     private void Awake()
     {
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         currentHealth = health;
-        currentLightAmount = lightAmount;
+        //currentLightAmount = lightAmount;
         onPlayerHit.Response.AddListener(OnPlayerHit);
+        UpdateSpeedBasedOnLight();
+        onEffectLight.Response.AddListener(OnEffectLight);
     }
     // Start is called before the first frame update
     void Start()
@@ -55,6 +74,8 @@ public class PlayerController : MonoBehaviour
             Movement();
             Attack();
             Dash();
+            SummonSword();
+            LightSteal();
         }
     }
 
@@ -167,7 +188,42 @@ public class PlayerController : MonoBehaviour
 
     void SummonSword()
     {
+        if(currentLightAmount >=1)
+        {
+            if (Input.GetKey(KeyCode.E))
+            {
+                // Key is being held down
+                swordSummontimer += Time.deltaTime;
+                animator.SetBool("SummoningSword", true);
+                // Adjust the float value based on the timer
+                currentValue = Mathf.Lerp(minValue, maxValue, swordSummontimer * rateOfChange);
+            }
+            else
+            {
+                // Key is not being pressed, reset the timer
+                if (swordSummontimer > 0)
+                {
+                    Debug.Log(swordSummontimer);
+                    if (swordSummontimer >= 1)
+                    {
+                        if (currentLightAmount >= (int)swordSummontimer)
+                        {
+                            onSummonSword.Raise((int)swordSummontimer);
+                            UpdateLightAmount((int)swordSummontimer);
 
+                        }
+
+                    }
+                }
+                animator.SetBool("SummoningSword", false);
+                swordSummontimer = 0f;
+
+            }
+        }
+        
+
+       
+       
     }
 
     void Dash()
@@ -176,10 +232,9 @@ public class PlayerController : MonoBehaviour
         {
             if (currentLightAmount >= 1 && !isDashing)
             {
-                currentLightAmount -= 1;
+                UpdateLightAmount(-1);
                 isDashing = true;
                 StartCoroutine(IEDash());
-                
             }
         }
        
@@ -212,6 +267,73 @@ public class PlayerController : MonoBehaviour
 
     void LightDash()
     {
+       
+    }
 
+    void LightSteal()
+    {
+
+        if (Input.GetKey(KeyCode.Q))
+        {
+            // Key is being held down
+            stealLightTimer += Time.deltaTime;
+
+            // Adjust the float value based on the timer
+            currentValue = Mathf.Lerp(0, 2, stealLightTimer * rateOfChange);
+
+            if (stealLightTimer >= 1)
+            {
+                onStealLight.Raise();
+                stealLightTimer = 0;
+            }
+        }
+        else
+        {
+            stealLightTimer = 0f;
+
+        }
+        
+    }
+
+    void UpdateLightAmount(float _amount)
+    {
+        currentLightAmount += _amount;
+        if(currentLightAmount < 0)
+        {
+            //event flare
+        }
+        UpdateSpeedBasedOnLight();
+
+    }
+
+    void UpdateSpeedBasedOnLight()
+    {
+        Debug.Log("Check speed");
+        foreach(LightToPlayerSpeedRelation l in lightToPlayerSpeedRelations)
+        {
+            if(currentLightAmount >= l.minLight && currentLightAmount < l.maxLight)
+            {
+                moveSpeed = l.speed;
+                Debug.Log("current speed: " +moveSpeed);
+            }
+        }
+    }
+
+    void OnEffectLight(float _Amount)
+    {
+        float newLightLevel = currentLightAmount;
+        newLightLevel += _Amount;
+
+        if(newLightLevel < 0)
+        {
+            newLightLevel = 0;
+        }
+        else if(newLightLevel > lightAmount) 
+        {
+            newLightLevel = lightAmount;
+        }
+
+        currentLightAmount += newLightLevel;
+        UpdateSpeedBasedOnLight();
     }
 }

@@ -17,6 +17,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private int currentHealth;
 
     [SerializeField] private GameEvent_Float onPlayerHit;
+    [SerializeField] private GameEventListener_Integer onEnemyHit;
 
     private bool canMove = true;
     private bool dead = false;
@@ -26,6 +27,7 @@ public class EnemyController : MonoBehaviour
     {
         currentHealth = health;
         rb = GetComponent<Rigidbody2D>();
+        onEnemyHit.Response.AddListener(OnEnemyHit);
     }
     // Start is called before the first frame update
     void Start()
@@ -52,12 +54,8 @@ public class EnemyController : MonoBehaviour
     {
         if(!dead)
         {
-            if (other.CompareTag("Sword"))
-            {
-                OnEnemyHit();
 
-            }
-            else if (other.CompareTag("PlayerBody"))
+            if (other.CompareTag("PlayerBody"))
             {
                 onPlayerHit.Raise(damageOnHit);
             }
@@ -121,12 +119,12 @@ public class EnemyController : MonoBehaviour
         canMove = true;
     }
 
-    void OnEnemyHit()
+    void OnEnemyHit(int _damage)
     {
         rb.AddForce(-rb.velocity, ForceMode2D.Impulse);
         canMove = false;
         m_Animator.SetTrigger("Hit");
-        UpdateHealth(-1);
+        UpdateHealth(-_damage);
         StartCoroutine(IEWaitForAttackReset());
     }
 

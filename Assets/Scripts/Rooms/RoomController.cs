@@ -6,9 +6,11 @@ public class RoomController : MonoBehaviour
 {
     [SerializeField] private GameObject roomCenter;
     [SerializeField] private GameObject enemyHost;
+
     private void Awake()
     {
         enemyHost.SetActive(false);
+
     }
 
     // Start is called before the first frame update
@@ -32,5 +34,6 @@ public class RoomController : MonoBehaviour
     {
         //Activate enemies
         enemyHost.SetActive(true);
+        
     }
 }
