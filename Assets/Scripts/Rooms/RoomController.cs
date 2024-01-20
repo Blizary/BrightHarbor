@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class RoomController : MonoBehaviour
 {
+    [SerializeField] private int currentShadowLvl;
     [SerializeField] private GameObject roomCenter;
     [SerializeField] private GameObject enemyHost;
+    [SerializeField] private ShadowLvlCamController shadowLvlCamController;
 
     private void Awake()
     {
         enemyHost.SetActive(false);
-
+        shadowLvlCamController = GameObject.FindFirstObjectByType<ShadowLvlCamController>();
     }
 
     // Start is called before the first frame update
@@ -34,6 +36,8 @@ public class RoomController : MonoBehaviour
     {
         //Activate enemies
         enemyHost.SetActive(true);
-        
+        shadowLvlCamController.UpdateCamShadowLvl(currentShadowLvl);
+
+
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum FacingDirection
 {
@@ -43,6 +44,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameEvent onStealLight;
     [SerializeField] private GameEventListener_Float onEffectLight;
 
+    [SerializeField] private Image lightAmountVisuals;
+
     private bool canBeHit = true;
     private bool isAlive = true;
     private bool isDashing = false;
@@ -58,6 +61,7 @@ public class PlayerController : MonoBehaviour
         //currentLightAmount = lightAmount;
         onPlayerHit.Response.AddListener(OnPlayerHit);
         UpdateSpeedBasedOnLight();
+        UpdateLightVisual();
         onEffectLight.Response.AddListener(OnEffectLight);
     }
     // Start is called before the first frame update
@@ -209,7 +213,7 @@ public class PlayerController : MonoBehaviour
                         if (currentLightAmount >= (int)swordSummontimer)
                         {
                             onSummonSword.Raise((int)swordSummontimer);
-                            UpdateLightAmount((int)swordSummontimer);
+                            UpdateLightAmount(-(int)swordSummontimer);
 
                         }
 
@@ -297,43 +301,49 @@ public class PlayerController : MonoBehaviour
 
     void UpdateLightAmount(float _amount)
     {
-        currentLightAmount += _amount;
-        if(currentLightAmount < 0)
+        float newLightLevel = currentLightAmount;
+        newLightLevel += _amount;
+
+        if (newLightLevel < 0)
         {
-            //event flare
+            newLightLevel = 0;
         }
+        else if (newLightLevel > lightAmount)
+        {
+            newLightLevel = lightAmount;
+        }
+
+        currentLightAmount = newLightLevel;
+
+        //update light visuals
+        UpdateLightVisual();
         UpdateSpeedBasedOnLight();
 
     }
 
+    void UpdateLightVisual()
+    {
+        float lightclamp = (currentLightAmount/lightAmount);
+        lightAmountVisuals.fillAmount = lightclamp;
+        //Debug.Log(lightclamp);
+    }
+
     void UpdateSpeedBasedOnLight()
     {
-        Debug.Log("Check speed");
+       // Debug.Log("Check speed");
         foreach(LightToPlayerSpeedRelation l in lightToPlayerSpeedRelations)
         {
             if(currentLightAmount >= l.minLight && currentLightAmount < l.maxLight)
             {
                 moveSpeed = l.speed;
-                Debug.Log("current speed: " +moveSpeed);
+               // Debug.Log("current speed: " +moveSpeed);
             }
         }
     }
 
-    void OnEffectLight(float _Amount)
+    void OnEffectLight(float _amount)
     {
-        float newLightLevel = currentLightAmount;
-        newLightLevel += _Amount;
-
-        if(newLightLevel < 0)
-        {
-            newLightLevel = 0;
-        }
-        else if(newLightLevel > lightAmount) 
-        {
-            newLightLevel = lightAmount;
-        }
-
-        currentLightAmount += newLightLevel;
+        UpdateLightAmount(_amount);
         UpdateSpeedBasedOnLight();
     }
 }

@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class ConnectionTriggerEnter : MonoBehaviour
 {
+    [SerializeField] private ConnectionController controller;
     [SerializeField] private GameEventListener_Vector3 onEnterRoom;
     [SerializeField] private GameEvent onEnterConnection;
 
     [SerializeField] bool hasBeenTriggered = false;
+    
 
     private void Awake()
     {
@@ -20,8 +22,11 @@ public class ConnectionTriggerEnter : MonoBehaviour
         {
             if (collision.CompareTag("PlayerBody"))
             {
+                Debug.Log("TRIGGER");
+                controller.OnEnterConnection();
                 onEnterConnection.Raise();
                 hasBeenTriggered = true;
+                
             }
         }
 
