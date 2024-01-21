@@ -7,6 +7,7 @@ using static UnityEngine.GraphicsBuffer;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private Animator m_Animator;
+    [SerializeField] private SpriteRenderer bodyRenderer;
     [SerializeField] private GameObject player;
     [SerializeField] private float movementSpeed;
     [SerializeField] private float attackRange;
@@ -25,6 +26,7 @@ public class EnemyController : MonoBehaviour
     private Rigidbody2D rb;
     private void Awake()
     {
+        player = GameObject.FindFirstObjectByType<PlayerController>().gameObject;
         currentHealth = health;
         rb = GetComponent<Rigidbody2D>();
         onEnemyHit.Response.AddListener(OnEnemyHit);
@@ -74,8 +76,19 @@ public class EnemyController : MonoBehaviour
         // Calculate the angle in degrees
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
+        if(angle < 0)
+        {
+            //player is on the left flip
+            bodyRenderer.flipX = true;
+        }
+        else
+        {
+            //player is on the right
+            bodyRenderer.flipX = false;
+
+        }
         // Set only the z rotation to face the player
-        transform.GetChild(0).transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        //transform.GetChild(0).transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
 
         // Move towards the target
         transform.Translate(direction * movementSpeed * Time.deltaTime);

@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
-        transform.position = parent.transform.position;
+        Vector3 newPos = parent.transform.position;
+        newPos.y = transform.position.y;
+        transform.position = newPos;
     }
 }

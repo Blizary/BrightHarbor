@@ -46,6 +46,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Image lightAmountVisuals;
 
+    [SerializeField] private Animator bodyAnimator;
+
     private bool canBeHit = true;
     private bool isAlive = true;
     private bool isDashing = false;
@@ -88,6 +90,9 @@ public class PlayerController : MonoBehaviour
         // Get input from the player
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         float verticalInput = Input.GetAxisRaw("Vertical");
+
+        bodyAnimator.SetFloat("x", horizontalInput);
+        bodyAnimator.SetFloat("y", verticalInput);
 
         // Calculate the movement direction
         Vector3 movement = new Vector3(horizontalInput, verticalInput, 0f).normalized;

@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ConnectionController : MonoBehaviour
+public class ConnectionController :EnviromentController
 {
-    [SerializeField] private int currentShadowlvl;
-    [SerializeField] private ShadowLvlCamController shadowlvlCamController;
 
     private void Awake()
     {
@@ -27,4 +25,7 @@ public class ConnectionController : MonoBehaviour
     {
         shadowlvlCamController.UpdateCamShadowLvl(currentShadowlvl);
     }
+
+ 
+
 }

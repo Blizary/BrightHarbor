@@ -8,7 +8,7 @@ public class RoomTriggerController : MonoBehaviour
     [SerializeField] private GameEvent_Vector3 onEnterRoom;
     [SerializeField] private GameEventListener onEnterConnection;
 
-    bool hasBeenTriggered = false;
+    [SerializeField] bool hasBeenTriggered = false;
 
     private void Awake()
     {
@@ -32,6 +32,7 @@ public class RoomTriggerController : MonoBehaviour
     void OnEnterConnection()
     {
         hasBeenTriggered = false;
+        roomController.LeftRoom();
     }
 
 }

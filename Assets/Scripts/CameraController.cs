@@ -37,7 +37,8 @@ public class CameraController : MonoBehaviour
     }
     void OnEnterConnection()
     {
-        isFollowing = true;
+       
+        isFollowing = true; 
     }
 
     void OnEnterRoom(Vector3 _pos)

@@ -29,7 +29,7 @@ public class AudioController : MonoBehaviour
 
     void OnMusicChange(string _newAudio)
     {
-        Debug.Log("new music request for: "+_newAudio);
+        //Debug.Log("new music request for: "+_newAudio);
         if(_newAudio.Contains("Darkness"))
         {
             StartCoroutine( ChangeMusic(darknessAudio));
@@ -44,7 +44,7 @@ public class AudioController : MonoBehaviour
 
     IEnumerator ChangeMusic(AudioSource _newAudio)
     {
-        Debug.Log("NEW MUSIC Processing");
+        //Debug.Log("NEW MUSIC Processing");
         float timer = 0.0f;
        
         if (activeAudioPlayer != _newAudio)
@@ -72,7 +72,7 @@ public class AudioController : MonoBehaviour
             activeAudioPlayer.enabled = false;
             activeAudioPlayer.Stop();
             activeAudioPlayer = _newAudio;
-            Debug.Log("NEW MUSIC ON");
+            //Debug.Log("NEW MUSIC ON");
         }
     }
 
