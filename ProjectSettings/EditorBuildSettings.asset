@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Dungeon1.unity
     guid: 1c77e45d498c0c44daac45d42f784dfd
+  - enabled: 1
+    path: Assets/Scenes/Harbor.unity
+    guid: 4fcb71769d5aca348b2e114bb0fa7854
   m_configObjects: {}

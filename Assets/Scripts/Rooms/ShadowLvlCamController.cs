@@ -5,7 +5,7 @@ using UnityEngine;
 public class ShadowLvlCamController : MonoBehaviour
 {
     [SerializeField] private List<GameObject> shadows;
-    [SerializeField] private int shadowlvl;
+    [SerializeField] public int shadowlvl;
 
     [SerializeField] private GameEvent_String onMusicChange;
 

@@ -12,6 +12,15 @@ public class DungeonShadowSpreading : MonoBehaviour
     [SerializeField] private float innerSpreadTimer;
     private bool isSpreading = true;
     [SerializeField] private EnviromentController current;
+
+    [SerializeField] protected GameEventListener_Bool onExitMenuShow;
+
+    private bool gamePaused = false;
+
+    private void Awake()
+    {
+        onExitMenuShow.Response.AddListener(OnExitMenuShow);
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -21,7 +30,7 @@ public class DungeonShadowSpreading : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isSpreading)
+        if(isSpreading && !gamePaused)
         {
             SpreadShadow();
         }
@@ -64,5 +73,18 @@ public class DungeonShadowSpreading : MonoBehaviour
         }
     }
 
-    
+    protected void OnExitMenuShow(bool _state)
+    {
+        if (_state)
+        {
+            gamePaused = true;
+
+        }
+        else
+        {
+            gamePaused = false;
+        }
+    }
+
+
 }

@@ -30,10 +30,11 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private List<LightToPlayerSpeedRelation> lightToPlayerSpeedRelations;
 
-    private float currentValue = 0f;
     private float swordSummontimer = 0f;
 
     private float stealLightTimer = 0f;
+    [SerializeField] private float currentRequiredGatherTimer = 1f;
+    private float gatherMaterialTimer = 0f;
 
     private bool mousePressed = false;
 
@@ -43,20 +44,28 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameEvent_Integer onSummonSword;
     [SerializeField] private GameEvent onStealLight;
     [SerializeField] private GameEventListener_Float onEffectLight;
+    [SerializeField] protected GameEventListener_Bool onExitMenuShow;
+    [SerializeField] private GameEvent_Bool onPauseMenuShow;
+    [SerializeField] private GameEventListener_Float onAddLight;
+    [SerializeField] private GameEvent onGatherMaterial;
+    [SerializeField] private GameEventListener_Float onGatherTimerUpdate;
 
-    [SerializeField] private Image lightAmountVisuals;
+
 
     [SerializeField] private Animator bodyAnimator;
 
     private bool canBeHit = true;
     private bool isAlive = true;
     private bool isDashing = false;
+    private bool gamePaused = false;
 
     Animator animator;
     Rigidbody2D rb;
+    UIController uiController;
 
     private void Awake()
     {
+        uiController = GameObject.FindFirstObjectByType<UIController>().GetComponent<UIController>();
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         currentHealth = health;
@@ -65,6 +74,11 @@ public class PlayerController : MonoBehaviour
         UpdateSpeedBasedOnLight();
         UpdateLightVisual();
         onEffectLight.Response.AddListener(OnEffectLight);
+        onExitMenuShow.Response.AddListener(OnExitMenuShow);
+        onAddLight.Response.AddListener(OnAddLight);
+        onGatherTimerUpdate.Response.AddListener(OnGatherTimerUpdate);
+
+
     }
     // Start is called before the first frame update
     void Start()
@@ -77,11 +91,16 @@ public class PlayerController : MonoBehaviour
     {
         if (isAlive)
         {
-            Movement();
-            Attack();
-            Dash();
-            SummonSword();
-            LightSteal();
+            if(!gamePaused)
+            {
+                Movement();
+                Attack();
+                Dash();
+                SummonSword();
+                LightSteal();
+                Gathermaterial();
+            }
+            PauseGame();
         }
     }
 
@@ -104,6 +123,24 @@ public class PlayerController : MonoBehaviour
         }
 
         currentdirection = GetLastDirection(horizontalInput, verticalInput);
+    }
+
+    void PauseGame()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(!gamePaused)
+            {
+                onPauseMenuShow.Raise(true);
+                gamePaused = true;
+            }
+            else
+            {
+                onPauseMenuShow.Raise(false);
+                gamePaused= false;
+            }
+            
+        }
     }
 
     FacingDirection GetLastDirection(float horizontalInput, float verticalInput)
@@ -173,6 +210,7 @@ public class PlayerController : MonoBehaviour
         {
             canBeHit = false;
             currentHealth -= _damage;
+            UpdateHealthVisual();
             if (currentHealth <= 0)
             {
                 //its dead
@@ -204,8 +242,6 @@ public class PlayerController : MonoBehaviour
                 // Key is being held down
                 swordSummontimer += Time.deltaTime;
                 animator.SetBool("SummoningSword", true);
-                // Adjust the float value based on the timer
-                currentValue = Mathf.Lerp(minValue, maxValue, swordSummontimer * rateOfChange);
             }
             else
             {
@@ -281,14 +317,14 @@ public class PlayerController : MonoBehaviour
 
     void LightSteal()
     {
-
+        if(!canBeHit)//just got hit
+        {
+            stealLightTimer = 0f;
+        }
         if (Input.GetKey(KeyCode.Q))
         {
             // Key is being held down
             stealLightTimer += Time.deltaTime;
-
-            // Adjust the float value based on the timer
-            currentValue = Mathf.Lerp(0, 2, stealLightTimer * rateOfChange);
 
             if (stealLightTimer >= 1)
             {
@@ -302,6 +338,47 @@ public class PlayerController : MonoBehaviour
 
         }
         
+    }
+
+
+    void Gathermaterial()
+    {
+        if (!canBeHit)//just got hit
+        {
+            stealLightTimer = 0f;
+        }
+        if (Input.GetKey(KeyCode.R))
+        {
+            // Key is being held down
+            gatherMaterialTimer += Time.deltaTime;
+
+            if (gatherMaterialTimer >= currentRequiredGatherTimer)
+            {
+                onGatherMaterial.Raise();
+                gatherMaterialTimer = 0;
+            }
+        }
+        else
+        {
+            gatherMaterialTimer = 0f;
+
+        }
+
+    }
+
+    void OnGatherTimerUpdate(float _time)
+    {
+        currentRequiredGatherTimer = _time;
+    }
+
+    public void OnAddLight(float _lightAmount)
+    {
+        UpdateLightAmount(_lightAmount);
+    }
+
+    public void UpdateGatherTimeRequired(float _newTimer)
+    {
+        currentRequiredGatherTimer = _newTimer;
     }
 
     void UpdateLightAmount(float _amount)
@@ -329,7 +406,13 @@ public class PlayerController : MonoBehaviour
     void UpdateLightVisual()
     {
         float lightclamp = (currentLightAmount/lightAmount);
-        lightAmountVisuals.fillAmount = lightclamp;
+        uiController.UpdateLightBar(lightclamp);
+        //Debug.Log(lightclamp);
+    }
+    void UpdateHealthVisual()
+    {
+        float healthClamp = (currentHealth / health);
+        uiController.UpdateHealthBar(healthClamp);
         //Debug.Log(lightclamp);
     }
 
@@ -350,5 +433,19 @@ public class PlayerController : MonoBehaviour
     {
         UpdateLightAmount(_amount);
         UpdateSpeedBasedOnLight();
+    }
+
+
+    void OnExitMenuShow(bool _state)
+    {
+        if (_state)
+        {
+            gamePaused = true;
+
+        }
+        else
+        {
+            gamePaused = false;
+        }
     }
 }

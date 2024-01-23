@@ -109,9 +109,107 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 823778533443258692}
+  - {fileID: 2695134565844340397}
+  - {fileID: 312498598648618595}
   m_Father: {fileID: 653304085467033438}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3656742337310500917
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 312498598648618595}
+  - component: {fileID: 1543467041423305216}
+  m_Layer: 6
+  m_Name: OnPauseMenuShow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &312498598648618595
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3656742337310500917}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -122.84059, y: -1.6674888, z: 0}
+  m_LocalScale: {x: 9.717119, y: 9.717119, z: 9.717119}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7182874528407044327}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1543467041423305216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3656742337310500917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17c5c4131dce15b4a9c46804ec7d596c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: b27842db284e0b543b8a2ea9d74cb2b9, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!1 &4047918942626330939
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2695134565844340397}
+  - component: {fileID: 7150603095355162140}
+  m_Layer: 6
+  m_Name: onExitMenuShow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2695134565844340397
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4047918942626330939}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 147.95436, y: -11.051075, z: 0}
+  m_LocalScale: {x: 9.717119, y: 9.717119, z: 9.717119}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7182874528407044327}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7150603095355162140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4047918942626330939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17c5c4131dce15b4a9c46804ec7d596c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: 9926d83a909e696429f1238f8b221202, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6431320270120871340
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,9 +220,9 @@ GameObject:
   m_Component:
   - component: {fileID: 653304085467033438}
   - component: {fileID: 8294084299995951624}
-  - component: {fileID: 848886648499248703}
   - component: {fileID: 9193030957058139170}
   - component: {fileID: 7602541536825978638}
+  - component: {fileID: 7773754375258996323}
   m_Layer: 6
   m_Name: EnemyLeep
   m_TagString: Enemy
@@ -181,42 +279,19 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.047301054, y: 0.34588897}
+  m_Offset: {x: 0.047301054, y: 0.3429327}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.0236506, y: 1.0059125}
+  m_Size: {x: 0.51, y: 1.0118251}
   m_EdgeRadius: 0
---- !u!114 &848886648499248703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6431320270120871340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a51e1fc803e6687459247811d7d111fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Animator: {fileID: 5447777133139257465}
-  bodyRenderer: {fileID: 2695634503014926638}
-  player: {fileID: 0}
-  movementSpeed: 1
-  attackRange: 2
-  lungeForce: 5
-  damageOnHit: 2
-  health: 5
-  currentHealth: 0
-  onPlayerHit: {fileID: 11400000, guid: 38b03146cc0dfb94ca919845d4683a39, type: 2}
-  onEnemyHit: {fileID: 8499669876269937209}
 --- !u!50 &9193030957058139170
 Rigidbody2D:
   serializedVersion: 4
@@ -287,8 +362,36 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.0236504, y: 1.0118251}
+  m_Size: {x: 0.51, y: 1.0118251}
   m_EdgeRadius: 0
+--- !u!114 &7773754375258996323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6431320270120871340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdbb5781be69d624ca55b5126f34df8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Animator: {fileID: 5447777133139257465}
+  bodyRenderer: {fileID: 2695634503014926638}
+  player: {fileID: 0}
+  movementSpeed: 1
+  attackRange: 2
+  damageOnHit: 2
+  lightAmountOnDeath: 2
+  health: 10
+  currentHealth: 0
+  onPlayerHit: {fileID: 11400000, guid: 38b03146cc0dfb94ca919845d4683a39, type: 2}
+  onEnemyHit: {fileID: 8499669876269937209}
+  onExitMenuShow: {fileID: 7150603095355162140}
+  onPauseMenuShow: {fileID: 1543467041423305216}
+  onAddLight: {fileID: 11400000, guid: 189cf383be3df684484a2ec2b84a43ba, type: 2}
+  gamePaused: 0
+  lungeForce: 5
 --- !u!1 &8423256420931369684
 GameObject:
   m_ObjectHideFlags: 0
