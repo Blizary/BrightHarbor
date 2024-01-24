@@ -3,19 +3,32 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+public enum MaterialType
+{
+    LIGHTFRAGMENT,
+    WOOD,
+    STONE,
+    METAL,
+    GEM
+}
 public class MaterialController : MonoBehaviour
 {
+    [SerializeField] private MaterialType type;
+    [SerializeField] private float amount;
     [SerializeField] private float gatherTimer;
     [SerializeField] private GameEventListener onGatherMaterial;
     [SerializeField] private GameEvent_Float onGatherTimerUpdate;
 
-    private bool playerInRage = false;
+    [SerializeField] private bool playerInRage = false;
+    private DataManager dataManager;
+
     Animator animator;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         onGatherMaterial.Response.AddListener(OnGatherMaterial);
+        dataManager = GameObject.FindFirstObjectByType<DataManager>();
     }
     // Start is called before the first frame update
     void Start()
@@ -31,8 +44,16 @@ public class MaterialController : MonoBehaviour
 
     void OnGatherMaterial()
     {
-        Destroy(gameObject);
-        //animator.SetTrigger("Consumed");
+        if(playerInRage)
+        {
+            MaterialAmount newMaterialAmount = new MaterialAmount();
+            newMaterialAmount.materialType = type;
+            newMaterialAmount.amount = amount;
+            dataManager.AddMaterials(newMaterialAmount);
+            //animator.SetTrigger("Consumed");
+            Destroy(gameObject);
+        }
+       
 
     }
 

@@ -11,11 +11,36 @@ public class DungeonManager : MonoBehaviour
     [SerializeField] private List<string> hardDungeons;
     [SerializeField] private List<string> bossDungeons;
 
+    private List<string> ogEasyDungeons;
+    private List<string> ogMediumDungeons;
+    private List<string> ogHardDungeons;
+    private List<string> ogBossDungeons;
+
     [SerializeField] public int currentDificulty = 0;
 
     private void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
+        foreach(string s in easyDungeons)
+        {
+            ogEasyDungeons.Add(s);
+        }
+        foreach (string s in mediumDungeons)
+        {
+            ogMediumDungeons.Add(s);
+        }
+
+        foreach (string s in hardDungeons)
+        {
+            ogHardDungeons.Add(s);
+        }
+
+        foreach (string s in bossDungeons)
+        {
+            ogBossDungeons.Add(s);
+        }
+
+
     }
 
     // Start is called before the first frame update
@@ -94,5 +119,34 @@ public class DungeonManager : MonoBehaviour
         string nextSceneName = _lvls[randomNewScene];
         _lvls.Remove(nextSceneName);
         return nextSceneName;
+    }
+
+    public void ResetLvl()
+    {
+        currentDificulty = 0;
+
+        easyDungeons.Clear();
+        mediumDungeons.Clear();
+        hardDungeons.Clear();
+        bossDungeons.Clear();
+
+        foreach (string s in ogEasyDungeons)
+        {
+            easyDungeons.Add(s);
+        }
+        foreach (string s in ogMediumDungeons)
+        {
+            mediumDungeons.Add(s);
+        }
+
+        foreach (string s in ogHardDungeons)
+        {
+            hardDungeons.Add(s);
+        }
+
+        foreach (string s in ogBossDungeons)
+        {
+            bossDungeons.Add(s);
+        }
     }
 }

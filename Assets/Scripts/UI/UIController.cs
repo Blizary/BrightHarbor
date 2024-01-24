@@ -9,25 +9,35 @@ public class UIController : MonoBehaviour
     [SerializeField] private Image lightAmountVisuals;
     [SerializeField] private Image healthAmountVisuals;
 
-    
+    [SerializeField] private GameObject materialUIPrefab;
+    [SerializeField] private MaterialBarController materialIngameHost;
+    [SerializeField] private MaterialBarController materialInDeathHost;
 
     [SerializeField] private GameObject exitMenu;
     [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject deathMenu;
 
     [SerializeField] private GameEventListener_Bool onExitMenuShow;
+    [SerializeField] private GameEventListener onPlayerDeath;
     [SerializeField] private GameEventListener_Bool onPauseMenuShow;
     [SerializeField] private GameEvent_Bool onPauseMenuShowActive;
+    [SerializeField] private GameEventListener onUpdateToHeldMaterials;
+
+    private DataManager dataManager;
 
     private DungeonManager dungeonManager;
     private void Awake()
     {
+        dataManager = GameObject.FindObjectOfType<DataManager>();
         onExitMenuShow.Response.AddListener(OnExitMenuShow);
         onPauseMenuShow.Response.AddListener(OnPauseMenuShow);
+        onPlayerDeath.Response.AddListener(OnPlayerDeath);
+        onUpdateToHeldMaterials.Response.AddListener(OnUpdateToHeldMaterials);
     }
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -74,6 +84,14 @@ public class UIController : MonoBehaviour
 
     public void GoToHarborButton()
     {
+        dungeonManager = GameObject.FindFirstObjectByType<DungeonManager>().GetComponent<DungeonManager>();
+        dungeonManager.ResetLvl();
+        SceneManager.LoadScene("Harbor");
+    }
+
+    public void DeathGoToHarborButton()
+    {
+        dataManager.ClearAll();
         SceneManager.LoadScene("Harbor");
     }
 
@@ -100,6 +118,17 @@ public class UIController : MonoBehaviour
     public void PauseMenuQuitButton()
     {
         Application.Quit();
+    }
+
+    public void OnPlayerDeath()
+    {
+        deathMenu.SetActive(true);
+    }
+
+    void OnUpdateToHeldMaterials()
+    {
+        materialIngameHost.UpdateVisuals();
+        //materialInDeathHost.UpdateVisuals();
     }
 
 

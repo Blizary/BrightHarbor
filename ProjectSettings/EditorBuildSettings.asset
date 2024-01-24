@@ -8,10 +8,19 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Dungeon1.unity
     guid: 1c77e45d498c0c44daac45d42f784dfd
   - enabled: 1
+    path: Assets/Scenes/initialize.unity
+    guid: 28fa8578fd0c4f244b5dc811e4d387b0
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 5ec8a70f888ebd94d8ed58866639cf4d
+  - enabled: 1
     path: Assets/Scenes/Harbor.unity
     guid: 4fcb71769d5aca348b2e114bb0fa7854
+  - enabled: 1
+    path: Assets/Scenes/Dungeon2.unity
+    guid: c5bbc2467ef5e0543bcdc7ecf841125d
   m_configObjects: {}

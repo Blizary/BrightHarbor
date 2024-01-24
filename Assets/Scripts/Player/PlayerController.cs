@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameEventListener_Float onEffectLight;
     [SerializeField] protected GameEventListener_Bool onExitMenuShow;
     [SerializeField] private GameEvent_Bool onPauseMenuShow;
+    [SerializeField] private GameEventListener_Bool onPauseMenuShowReceive;
     [SerializeField] private GameEventListener_Float onAddLight;
     [SerializeField] private GameEvent onGatherMaterial;
     [SerializeField] private GameEventListener_Float onGatherTimerUpdate;
@@ -77,6 +78,7 @@ public class PlayerController : MonoBehaviour
         onExitMenuShow.Response.AddListener(OnExitMenuShow);
         onAddLight.Response.AddListener(OnAddLight);
         onGatherTimerUpdate.Response.AddListener(OnGatherTimerUpdate);
+        onPauseMenuShowReceive.Response.AddListener(OnPauseMenuReceived);
 
 
     }
@@ -141,6 +143,11 @@ public class PlayerController : MonoBehaviour
             }
             
         }
+    }
+
+    void OnPauseMenuReceived(bool _state)
+    {
+        gamePaused = _state;
     }
 
     FacingDirection GetLastDirection(float horizontalInput, float verticalInput)
